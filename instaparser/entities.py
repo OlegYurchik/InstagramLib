@@ -24,7 +24,7 @@ class ElementConstructor(type):
         return cls._cache[str(key)]
 
 
-# Common abstract classes 
+# Common abstract classes
 class Element(metaclass=ElementConstructor):
     def _primary_key(self):
         raise NotImplementedError
@@ -33,7 +33,7 @@ class Element(metaclass=ElementConstructor):
 class UpdatableElement(Element):
     def _set_data(self):
         raise NotImplementedError
-    
+
     def _entry_data_path(self):
         raise NotImplementedError
 
@@ -44,7 +44,7 @@ class UpdatableElement(Element):
 class HasMediaElement(UpdatableElement):
     def _media_path(self):
         raise NotImplementedError
-    
+
     def _media_query_hash(self):
         raise NotImplementedError
 
@@ -138,11 +138,11 @@ class Media(UpdatableElement):
         if "is_ad" in data:
             self.is_ad = data["is_ad"]
         self.display_url = data["display_url"]
-        self.resources = [resource["src"] for resource in data["display_resources"]]
+        self.resources = [resource["src"] for resource in data["thumbnail_resources"]]
         self.album = set()
         if data.get("__typename") == "GraphSidecar":
             self.is_album = True
-            for edge in data["edge_sidecar_to_children"]["edges"]:
+            for edge in data["edge_media_to_caption"]["edges"]:
                 if edge["node"].get("shortcode", self.code) != self.code:
                     self.album.add(Media(edge["node"]["shortcode"]))
         else:
