@@ -138,11 +138,14 @@ class Media(UpdatableElement):
         if "is_ad" in data:
             self.is_ad = data["is_ad"]
         self.display_url = data["display_url"]
-        self.resources = [resource["src"] for resource in data["display_resources"]]
+        if "display_resources" in data:
+            self.resources = [resource["src"] for resource in data["display_resources"]]
+        else:
+            self.resources = [resource["src"] for resource in data["thumbnail_resources"]]
         self.album = set()
         if data.get("__typename") == "GraphSidecar":
             self.is_album = True
-            for edge in data["edge_sidecar_to_children"]["edges"]:
+            for edge in data["edge_media_to_caption"]["edges"]:
                 if edge["node"].get("shortcode", self.code) != self.code:
                     self.album.add(Media(edge["node"]["shortcode"]))
         else:
