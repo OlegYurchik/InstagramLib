@@ -70,6 +70,9 @@ class Account(HasMediaElement):
         self.media_count = None
         self.is_private = None
         self.is_verified = None
+        self.followed_by_viewer = None
+        self.follows_viewer = None
+        self.blocked_by_viewer = None
         self.country_block = None
 
         self.media = set()
@@ -86,6 +89,9 @@ class Account(HasMediaElement):
         self.follows_count = data["edge_follow"]["count"]
         self.followers_count = data["edge_followed_by"]["count"]
         self.media_count = data["edge_owner_to_timeline_media"]["count"]
+        self.followed_by_viewer = data["followed_by_viewer"]
+        self.follows_viewer = data["follows_viewer"]
+        self.blocked_by_viewer = data["blocked_by_viewer"]
         self.is_private = data["is_private"]
         self.is_verified = data["is_verified"]
         self.country_block = data["country_block"]
