@@ -122,6 +122,9 @@ The Account object has the following fields:
 * media
 * follows
 * followers
+* followed_by_viewer
+* follows_viewer
+* blocked_by_viewer
 ## Media
 To create an Media entity as an argument, the constructor should pass the shortcode
 ```python3
