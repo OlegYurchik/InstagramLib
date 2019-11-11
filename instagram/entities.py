@@ -1,3 +1,12 @@
+import json
+
+
+def Account_from_json(json_object):
+    acc = Account(json_object["username"])
+    acc.__dict__ = json_object
+    return acc
+
+
 class ElementConstructor(type):
     def __new__(mcs, name, classes, fields):
         def delete(self):
@@ -24,7 +33,7 @@ class ElementConstructor(type):
         return cls.cache[str(key)]
 
 
-# Common abstract classes 
+# Common abstract classes
 class Element(metaclass=ElementConstructor):
     def primary_key(self):
         raise NotImplementedError
@@ -33,7 +42,7 @@ class Element(metaclass=ElementConstructor):
 class UpdatableElement(Element):
     def set_data(self):
         raise NotImplementedError
-    
+
     def entry_data_path(self):
         raise NotImplementedError
 
@@ -44,10 +53,9 @@ class UpdatableElement(Element):
 class HasMediaElement(UpdatableElement):
     def media_path(self):
         raise NotImplementedError
-    
+
     def media_query_hash(self):
         raise NotImplementedError
-
 
 
 class Account(HasMediaElement):
@@ -89,6 +97,12 @@ class Account(HasMediaElement):
         self.is_private = data["is_private"]
         self.is_verified = data["is_verified"]
         self.country_block = data["country_block"]
+
+    def to_JSON(self):
+        return json.dumps(self, indent=4, cls=AccountEncoder)
+
+    def from_json(self, file_name):
+        self = json.load(open(file_name), object_hook=Account_from_json)
 
 
 class Media(UpdatableElement):
@@ -233,3 +247,18 @@ class Comment(Element):
         self.owner = owner
         self.text = text
         self.created_at = created_at
+
+
+class AccountEncoder(json.JSONEncoder):
+    def default(self, o):
+        if isinstance(o, Account):
+            return o.__dict__
+        if isinstance(o, set):
+            return list(o)
+        return json.JSONEncoder.default(self, o)
+
+
+def Account_from_json(json_object):
+    acc = Account(json_object["username"])
+    acc.__dict__ = json_object
+    return acc
