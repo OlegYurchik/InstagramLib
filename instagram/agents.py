@@ -298,12 +298,12 @@ class WebAgent:
                     )
                 raise UnexpectedResponse(exception, media)
 
-        variables_string = '{{"shortcode":"{code}","first":{first},"after":"{after}"}}'
+        variables_string = '{{"shortcode":"{code}","first":{first},"after":{json.dumps(after)}}}'
         while True:
             data = {"after": pointer, "code": media.code, "first": min(limit, count)}
 
             response = self.graphql_request(
-                query_hash="f0986789a5c5d17c2400faebf16efd0d",
+                query_hash="bc3296d1ce80a24b1b6e40b1e72903f5",
                 variables=variables_string.format(**data),
                 referer="https://instagram.com/%s%s" % (
                     media.base_url,
