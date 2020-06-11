@@ -10,7 +10,7 @@ import json
 import re
 import requests
 from requests.exceptions import HTTPError
-from time import sleep
+from time import sleep, time
 
 
 exception_manager = ExceptionManager()
@@ -845,14 +845,17 @@ class WebAgentAccount(Account, WebAgent):
         if not "headers" in settings:
             settings["headers"] = {}
         settings["headers"].update({
+            "Content-Type": "application/x-www-form-urlencoded",
             "X-IG-App-ID": "936619743392459",
             # "X_Instagram-AJAX": "ee72defd9231",
             "X-CSRFToken": self.csrf_token,
             "Referer": "https://www.instagram.com/",
         })
+        str_time = str(int(time()))
+        password = '#PWD_INSTAGRAM_BROWSER:0:' + str_time + ':' + password
         if not "data" in settings:
             settings["data"] = {}
-        settings["data"].update({"username": self.username, "password": password})
+        settings["data"].update({"username": self.username, "enc_password": password})
 
         try:
             response = self.post_request(
