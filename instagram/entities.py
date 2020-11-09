@@ -132,6 +132,7 @@ class Media(UpdatableElement):
         self.date = data["taken_at_timestamp"]
         if "location" in data and data["location"] and "id" in data["location"]:
             self.location = Location(data["location"]["id"])
+            self.location.set_data(data["location"])
         self.likes_count = data["edge_media_preview_like"]["count"]
         if "edge_media_to_comment" in data:
             self.comments_count = data["edge_media_to_comment"]["count"]
@@ -195,16 +196,16 @@ class Location(HasMediaElement):
 
     def set_data(self, data):
         self.id = data["id"]
-        self.slug = data["slug"]
-        self.name = data["name"]
-        self.has_public_page = data["has_public_page"]
+        self.slug = data["slug"] if "slug" in data else None
+        self.name = data["name"] if "name" in data else None
+        self.has_public_page = data["has_public_page"] if "has_public_page" in data else None
         if "directory" in data:
             self.directory = data["directory"]
-        self.coordinates = (data["lat"], data["lng"])
-        self.media_count = data["edge_location_to_media"]["count"]
-        for node in data["edge_location_to_top_posts"]["edges"]:
-            self.top_posts.add(Media(node["node"]["shortcode"]))
-
+        self.coordinates = (data["lat"], data["lng"]) if "lat" in data and "lng" in data else None
+        self.media_count = data["edge_location_to_media"]["count"] if "edge_location_to_media" in data else None
+        if "edge_location_to_top_posts" in data:
+            for node in data["edge_location_to_top_posts"]["edges"]:
+                self.top_posts.add(Media(node["node"]["shortcode"]))
 
 class Tag(HasMediaElement):
     primary_key = "name"
