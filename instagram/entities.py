@@ -61,19 +61,19 @@ class Account(HasMediaElement):
     media_query_hash = "c6809c9c025875ac6f02619eae97a80e"
 
     def __init__(self, username):
-        self.id = None
+        # self.id = None
         self.username = username
-        self.full_name = None
-        self.profile_pic_url = None
-        self.profile_pic_url_hd = None
-        self.fb_page = None
-        self.biography = None
-        self.follows_count = None
-        self.followers_count = None
-        self.media_count = None
-        self.is_private = None
-        self.is_verified = None
-        self.country_block = None
+        # self.full_name = None
+        # self.profile_pic_url = None
+        # self.profile_pic_url_hd = None
+        # self.fb_page = None
+        # self.biography = None
+        # self.follows_count = None
+        # self.followers_count = None
+        # self.media_count = None
+        # self.is_private = None
+        # self.is_verified = None
+        # self.country_block = None
 
         self.media = set()
         self.follows = set()
