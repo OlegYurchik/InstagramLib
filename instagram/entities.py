@@ -7,7 +7,7 @@ class ElementConstructor(type):
 
 # Common abstract classes
 class Element(metaclass=ElementConstructor):
-    def __new__(cls, *args, **kwargs):
+    def __new__(cls, key, *args, **kwargs):
         if not str(key) in cls.cache:
             cls.cache[str(key)] = super().__new__(cls, *args, **kwargs)
 
