@@ -70,9 +70,19 @@ class WebAgent:
             if obj is None:
                 return None
 
-            data = data["entry_data"]
-            for key in obj.entry_data_path:
-                data = data[key]
+            match = re.search(
+                r"<script[^>]*>\s*window.__additionalDataLoaded.*?((?!<script>){.*)\)\s*;\s*<\/script>",
+                response.text,
+            )
+            if match is not None:
+                data = json.loads(match.group(1))
+                for key in obj.entry_data_path[2:]:
+                    data = data[key]
+            else:
+                data = data["entry_data"]
+                for key in obj.entry_data_path:
+                    data = data[key]
+
             obj.set_data(data)
 
             self.logger.debug("Update '%s' was successfull", "self" if obj is None else obj)
@@ -449,9 +459,19 @@ class AsyncWebAgent:
             if obj is None:
                 return None
 
-            data = data["entry_data"]
-            for key in obj.entry_data_path:
-                data = data[key]
+            match = re.search(
+                r"<script[^>]*>\s*window.__additionalDataLoaded.*?((?!<script>){.*)\)\s*;\s*<\/script>",
+                response.text,
+            )
+            if match is not None:
+                data = json.loads(match.group(1))
+                for key in obj.entry_data_path[2:]:
+                    data = data[key]
+            else:
+                data = data["entry_data"]
+                for key in obj.entry_data_path:
+                    data = data[key]
+
             obj.set_data(data)
 
             if not self.logger is None:
